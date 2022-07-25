@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spender Buddy</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/615ea7a76f.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="sbTitle">Spender Buddy v1.0</h1>
+    <div class="profileSidebar contentSection">
+        <div class="usernameCont">
+            <form action="/logout" method="post">
+                <button type="submit" class="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </form>
+            <h1> <%= vUser.username %> </h1>
+            <button class="lightModeToggle"><i class="fa-solid fa-lightbulb"></i></button>
+        </div>
+
+        <div class="sectionsCont">
+            <% if ( vSections.length === 0){ %>
+                <p> Add a Section </p>
+            <% } else { %> 
+                <% for( const section of vSections ){ %>
+    
+                    <% let sectionPercent = (Math.round(section.currentAmount/section.limitAmount * 100)); %> 
+                    <% let circleColor %> 
+                    <% if(sectionPercent <= 65) {circleColor = "#23c483" %>
+                    <% } else if(sectionPercent > 65 && sectionPercent <= 85) {circleColor = "#ffff00" %> 
+                    <% } else if(sectionPercent > 85){circleColor = "#c42323"} %> 
+    
+                    <div class="sectionForms">
+                        <form class="sectionDelete" action="/deleteSection" method="post">
+                            <button class="deleteButton" type="submit" name="sectionId" value="<%=section._id%>"><i class="fa-regular fa-trash-can"></i></button>
+                        </form>
+                        <form class="sectionSelect" action= "/sSelect" method="post">
+                            <button type="submit" name="sectionName" value="<%=section.name%>"><%= section.name %></button>
+                        </form>
+                        <svg class="svg-wrapper" height="25" width="25" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="sectionCircle whiteCircle" cx="12" cy="12" r="14" fill="none" stroke="white" stroke-width="3" ></circle>
+                            <circle class="sectionCircle" cx="12" cy="12" r="14" fill="none" stroke-dashoffset= "<%= Math.round(88-(sectionPercent*0.88))%>" stroke=<%= circleColor %>  ></circle>
+                        </svg>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+        <div class="addSectionCont">
+            <h3>Add new Section: </h3>
+            <form class="addSectionForm" action="/addSection" method="post">
+                <input type="text" name="newSectionName" placeholder="Name" autocomplete="off" required><span></span>
+                <input type="number" name="newSectionAmount" placeholder="Budget" autocomplete="off" step="0.01" min="0" required><span></span>
+                <button type="submit" name="userToMod" value="<%= vUser.username %>"><i class="fa-regular fa-square-plus"></i></button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="activeSection contentSection">
+        <div class="titleCont">
+            <button class="menuBtn mobileBtn"><i class="fa-solid fa-bars"></i></button>
+            <% if ( vSections.length === 0){ %>
+                <h1 class="itemsTitle">  </h1>
+            </div>
+            <% } else { %> 
+                <h1 class="itemsTitle"> <%= vItems.name %> </h1>
+            <button class="infoBtn mobileBtn"><i class="fa-solid fa-circle-info"></i></button>
+            </div>
+            
+            <div class="itemsCont">
+                <% if ( vItems.items.length === 0){ %>
+                    <p> Add Items </p>
+                    <% } else { %> 
+                        <% vItems.items.forEach(function(item){ %>
+                            <form class="deleteItemsForm" action="/deleteItems" method="post">
+                                <button class="deleteButton" type="submit" name="deletedItem" value="<%=item._id%>"><i class="fa-regular fa-trash-can"></i></button>
+                                <p><%= item.name %> </p>
+                                <p>$<%= item.amount %></p>
+                            </form>
+                <% }) %>
+                <% } %> 
+            </div>
+            
+            <div class="addItemsCont">
+                <form class="addItemsForm" action="/addItem" method="post">
+                    <input type="text" name="newItemName" placeholder="Item Name" autocomplete="off" required>
+                    <input type="number" name="newItemAmount" placeholder="Price" autocomplete="off" step="0.01" min="0" required>
+                    <button type="submit" name="sectionToMod" value="<%= vItems.name %>"><i class="fa-regular fa-square-plus"></i></button>
+                </form>
+                
+            </div>
+            <% } %>
+    </div>
+
+    <div class="infoSidebar contentSection">
+        <% if ( vSections.length === 0){ %>
+            <div>
+
+                <h1>  </h1>
+            </div>
+        <% } else { %> 
+            <div class="progressCont">
+                <h2><%= vItems.name %> Details:</h2>
+                <svg class="svg-wrapper" height="150" width="150" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="whiteCircle" cx="75" cy="75" r="70" fill="none" stroke="white" stroke-width="12.8" ></circle>
+                    <circle class="progressCircle" cx="75" cy="75" r="70" fill="none" ></circle>
+                    <text x="50%" y="55%" text-anchor="middle" ><%= (Math.round((vItems.currentAmount/vItems.limitAmount)*100))%>%</text>
+                </svg> 
+                <h2>$<%= parseFloat(vItems.currentAmount).toFixed(1) %> / $<%= vItems.limitAmount %></h2>
+            </div>
+            <div class="sortedItemsCont">
+                <h3>Items Breakdown</h3>
+                <div class="tableCont">
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>%/Total</th>
+                        </tr>
+                        <% sortedItems = vItems.items.sort((a,b) => b.amount - a.amount) %> 
+                        <% sortedItems.forEach(function(item){ %>
+                        <tr>
+                            <td><%= item.name %></td>
+                            <td>$<%= item.amount %></td>
+                            <td><%=(Math.round((item.amount/vItems.limitAmount)*100))%>%</td>
+                        </tr>
+                        <% }) %> 
+                    </table>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <footer><p>Wavey Original 2022</p></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="js/index.js" charset="utf-8"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spender Buddy Sign In/Up</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/auth.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/615ea7a76f.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="sbTitle">Spender Buddy v1.0</h1>
+
+    <div class="authMain">
+
+        <div class="loginCont authCont">
+            <h1>Sign in</h1>
+            <form class="loginForm authForm" action="/login" method="post">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" autocomplete="off" required>
+                <button class="submitBtn" type="submit">Sign in</button>
+            </form>
+            <form action="/auth/google">
+                <button class="submitGoogle"><i class="fa-brands fa-google"></i> Sign in/up</button>
+            </form>
+            
+        </div>
+
+        <div class="signupCont authCont">
+            <h1>Sign up</h1>
+            <form class="signupForm authForm" action="/signup" method="post">
+                <!-- <input type="email" name="signupEmail" placeholder="Email" autocomplete="off" required> -->
+                <input type="text" name="username" placeholder="Username" autocomplete="off" required>
+                <input type="password" name="password" placeholder="Password" autocomplete="off" required>
+                <button class="submitBtn" type="submit">Sign up</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
