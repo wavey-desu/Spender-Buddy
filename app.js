@@ -8,6 +8,11 @@ const passportLocalMongoose = require("passport-local-mongoose")
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate')
 require('dotenv').config()
+var http = require("http");
+
+setInterval(function() {
+    http.get("https://spender-buddy.herokuapp.com/");
+}, 300000); // ping every 5 minutes (300000)
 
 const app = express();
 
@@ -58,7 +63,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique:true
+        // unique:true
     },
     // email: {
     //     type: String,

@@ -149,6 +149,9 @@ span{
 .submitGoogle:active{
     transform: translateY(-.01rem);
 }
+.oAuthForm{
+    margin-top: 1rem;
+}
 
 @media screen and (max-width: 820px) {
     .authMain{
