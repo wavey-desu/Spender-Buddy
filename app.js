@@ -11,7 +11,7 @@ require('dotenv').config()
 var http = require("http");
 
 setInterval(function() {
-    http.get("https://spender-buddy.herokuapp.com/");
+    http.get("http://spender-buddy.herokuapp.com/");
 }, 300000); // ping every 5 minutes (300000)
 
 const app = express();
