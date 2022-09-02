@@ -102,9 +102,7 @@ passport.deserializeUser(function(id, done){
     callbackURL: "https://spender-buddy.herokuapp.com/auth/google/home"
   },
   function(accessToken, refreshToken, profile, cb) {
-    // console.log(profile);
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        // console.log(user);
         user.username = profile.displayName;        
         user.save();
         return cb(err, user);
@@ -132,12 +130,12 @@ app.get('/auth/google/home',
 app.post("/signup", function(req,res){
     const authUsername = req.body.username;
     const authPassword = req.body.password;
-    console.log(authPassword);
 
     User.register({username: req.body.username},req.body.password, function(err, user){
         if (err){
             console.log(err);
-            res.redirect("/")
+            res.send("<script>alert('Username already taken'); window.location.href = '/'</script>");
+            // res.redirect("/")
         } else {
             passport.authenticate("local")(req, res, function(){
                 res.redirect("/home");
@@ -176,7 +174,9 @@ app.get("/home", function(req, res){
                 }
                 else{
                     rItems = rSections[0]
-                    rSections[0].isActive = 1;
+                    if (rSections[0] !== undefined){
+                        rSections[0].isActive = 1;
+                    }
                 }
     
                 rUser.save();
